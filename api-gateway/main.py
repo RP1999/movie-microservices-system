@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Body
 from fastapi.responses import StreamingResponse
+from typing import Any
 import httpx
 
 app = FastAPI(
@@ -56,11 +57,11 @@ async def proxy_get(service_name: str, path: str, request: Request):
     return await handle_proxy(service_name, path, request)
 
 @app.post("/{service_name}/{path:path}", tags=["Reverse Proxy"])
-async def proxy_post(service_name: str, path: str, request: Request):
+async def proxy_post(service_name: str, path: str, request: Request, payload: Any = Body(default=None)):
     return await handle_proxy(service_name, path, request)
 
 @app.put("/{service_name}/{path:path}", tags=["Reverse Proxy"])
-async def proxy_put(service_name: str, path: str, request: Request):
+async def proxy_put(service_name: str, path: str, request: Request, payload: Any = Body(default=None)):
     return await handle_proxy(service_name, path, request)
 
 @app.delete("/{service_name}/{path:path}", tags=["Reverse Proxy"])
