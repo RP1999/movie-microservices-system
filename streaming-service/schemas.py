@@ -16,3 +16,10 @@ class WatchRecord(BaseModel):
     user_id: str
     movie_id: str
     time: datetime
+    progress_minutes: Optional[int] = None
+    status: Optional[str] = None
+
+class WatchProgressRequest(BaseModel):
+    user_id: str = Field(..., description="The ID of the user watching the movie")
+    movie_id: str = Field(..., description="The ID of the movie being watched")
+    progress_minutes: int = Field(..., description="The minute mark the user paused the movie at")

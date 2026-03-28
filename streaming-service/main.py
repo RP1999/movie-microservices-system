@@ -5,7 +5,7 @@ from typing import List
 from dotenv import load_dotenv
 import os
 
-from schemas import StreamResponse, WatchRequest, WatchRecord
+from schemas import StreamResponse, WatchRequest, WatchRecord, WatchProgressRequest
 
 # Load environment variables
 load_dotenv()
@@ -77,3 +77,33 @@ def get_watch_history(user_id: str):
         
     data = list(watch_collection.find({"user_id": user_id}, {"_id": 0}))
     return data
+
+@app.put("/watch/progress", tags=["Watch History"])
+def update_progress(progress_request: WatchProgressRequest):
+    """
+    Save the user's progress for a movie they are watching.
+    """
+    if watch_collection is None:
+        raise HTTPException(status_code=503, detail="Database connection failed")
+        
+    result = watch_collection.update_one(
+        {"user_id": progress_request.user_id, "movie_id": progress_request.movie_id},
+        {"$set": {"progress_minutes": progress_request.progress_minutes, "status": "paused", "time": datetime.now()}},
+        upsert=True
+    )
+    
+    return {"message": "Watch progress saved successfully"}
+
+@app.delete("/watch/{user_id}", tags=["Watch History"])
+def clear_history(user_id: str):
+    """
+    Clear all watch history for a specific user.
+    """
+    if watch_collection is None:
+        raise HTTPException(status_code=503, detail="Database connection failed")
+        
+    result = watch_collection.delete_many({"user_id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="No watch history found to delete")
+        
+    return {"message": f"Successfully deleted {result.deleted_count} watch records"}
