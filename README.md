@@ -2,7 +2,7 @@
 Microservices-based Movie Streaming &amp; Recommendation System
 
 
-## 🚀 Review Service – How to Run
+## 🚀 Review & Rating Service – How to Run
 
 Follow these steps to set up and run the Review & Rating Service locally.
 
@@ -96,19 +96,22 @@ uvicorn app.main:app --reload --port 8005
 
 ## 📁 Project Structure
 
+
+```
 app/
- ├── main.py
- ├── database.py
- ├── models/
- │    └── review_model.py
- ├── schemas/
- │    └── review_schema.py
- ├── routes/
- │    └── review_routes.py
- ├── services/
- │    └── review_service.py
+├── main.py
+├── database.py
+├── models/
+│   └── review_model.py
+├── schemas/
+│   └── review_schema.py
+├── routes/
+│   └── review_routes.py
+├── services/
+│   └── review_service.py
 requirements.txt
 .env.example
 .gitignore
+```
 
 ```
