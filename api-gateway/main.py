@@ -11,10 +11,13 @@ app = FastAPI(
 
 # Configuration for underlying services
 SERVICES = {
-    "streaming": "http://localhost:8003",
-    # Other services can be added here
-    # "user": "http://localhost:8001",
-    # "movie": "http://localhost:8002",
+    "streaming": "http://localhost:8003",   # Ranidu's part
+    "watchlist": "http://localhost:8004",   # Siluni's part
+    "review": "http://localhost:8005",      # Piyumi's part
+    # Add more services here as teammates finish:
+    # "user": "http://localhost:8001",      # Lashan's part
+    # "movie": "http://localhost:8002",     # Shevin's part
+    # "analytics": "http://localhost:8006", # Dilina's part
 }
 
 @app.get("/", tags=["Gateway Info"])
