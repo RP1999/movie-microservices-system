@@ -228,3 +228,8 @@ async def delete_user(user_id: int, request: Request):
 async def get_admins(request: Request):
     """Get all users with the admin role."""
     return await forward("user", "api/admin/users/role/admin", request)
+
+@app.post("/users/admin/{user_id}/assign-role", tags=["User Service"])
+async def assign_role_to_user(user_id: int, request: Request, payload: Any = Body(default=None)):
+    """Assign an admin or user role to a specific user. Body: {role}"""
+    return await forward("user", f"api/admin/users/{user_id}/role", request)
