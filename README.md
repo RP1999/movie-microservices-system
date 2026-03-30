@@ -1,42 +1,58 @@
-# Movie Service
+# 🎬 Movie Service
 
-Movie Service backend for the Movie Streaming Platform assignment.
+Backend implementation of the **Movie Service** for the Movie Streaming Platform assignment.
 
-## Owner
+## 👤 Owner
 
-- Rathnasinghe S J R (IT22908124)
+- **Rathnasinghe S J R (IT22908124)**
 
-## Overview
+## 📖 Overview
 
-This branch contains the complete backend implementation for the Movie Service microservice. It is built with FastAPI and MongoDB Atlas and exposes Swagger documentation for direct access as well as access through the API Gateway.
+This branch contains the complete backend implementation for the **Movie Service** microservice.  
+It is built with **FastAPI** and **MongoDB Atlas** and supports both:
 
-## Scope
+- direct service access on port `8002`
+- API Gateway access through port `8000`
+
+## 🧭 Service Diagram
+
+```mermaid
+flowchart LR
+    A[Client or Tester] -->|Direct Swagger / API| B[Movie Service<br/>FastAPI :8002]
+    A -->|Gateway Access| C[API Gateway<br/>Port 8000]
+    C -->|Proxy /movies/*| B
+    B -->|Movie metadata| D[(MongoDB Atlas)]
+    B -->|Thumbnail files| E[Local Storage<br/>app/uploads/thumbnails]
+    B -->|Movie files| F[Local Storage<br/>app/uploads/videos]
+```
+
+## 🎯 Scope
 
 This service is responsible for:
 
-- Add a new movie
-- Update movie details
-- Delete a movie
-- Get all movies
-- Get a movie by ID
-- Search movies by title or category
-- Filter movies by category
+- adding a new movie
+- updating movie details
+- deleting a movie
+- getting all movies
+- getting a movie by ID
+- searching movies by title or category
+- filtering movies by category
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- FastAPI
-- Uvicorn
-- MongoDB Atlas
-- Motor
-- Python Multipart for file uploads
+- **FastAPI**
+- **Uvicorn**
+- **MongoDB Atlas**
+- **Motor**
+- **python-multipart**
 
-## Storage Design
+## 💾 Storage Design
 
-- MongoDB stores movie metadata
+- Movie metadata is stored in **MongoDB Atlas**
 - Thumbnail files are stored locally in `app/uploads/thumbnails`
 - Movie files are stored locally in `app/uploads/videos`
 
-## Project Structure
+## 🗂️ Project Structure
 
 ```text
 app/
@@ -50,22 +66,22 @@ requirements.txt
 README.md
 ```
 
-## API URLs
+## 🔗 Direct Service URLs
 
-- Direct service base URL: `http://localhost:8002`
-- Movie API base URL: `http://localhost:8002/api/movies`
+- Base URL: `http://localhost:8002`
+- Movie API: `http://localhost:8002/api/movies`
 - Swagger UI: `http://localhost:8002/docs`
 - ReDoc: `http://localhost:8002/redoc`
-- Health check: `http://localhost:8002/health`
+- Health Check: `http://localhost:8002/health`
 
-## API Gateway Access
+## 🌐 API Gateway Access
 
 If the API Gateway is running on port `8000`, this service can also be accessed through:
 
-- Gateway movie Swagger: `http://localhost:8000/movies/docs`
-- Gateway movie API: `http://localhost:8000/movies/api/movies`
+- Gateway Swagger: `http://localhost:8000/movies/docs`
+- Gateway Movie API: `http://localhost:8000/movies/api/movies`
 
-## Features Implemented
+## ✅ Features Implemented
 
 - `GET /api/movies`
 - `GET /api/movies/{movie_id}`
@@ -74,25 +90,25 @@ If the API Gateway is running on port `8000`, this service can also be accessed 
 - `DELETE /api/movies/{movie_id}`
 - `GET /health`
 
-## Request Details
+## 📥 Request Details
 
-### Create or Update Movie
+### Create or Update a Movie
 
-The service accepts:
+The API accepts:
 
 - `title`
 - `category`
 - `thumbnail` as an uploaded image file
 - `movie_file` as an uploaded video file
 
-Supported thumbnail extensions:
+### Supported Thumbnail Formats
 
 - `.jpg`
 - `.jpeg`
 - `.png`
 - `.webp`
 
-Supported video extensions:
+### Supported Video Formats
 
 - `.mp4`
 - `.mov`
@@ -100,9 +116,9 @@ Supported video extensions:
 - `.avi`
 - `.webm`
 
-## Environment Variables
+## ⚙️ Environment Variables
 
-Copy `.env.example` to `.env` and set your values.
+Copy `.env.example` to `.env` and configure your values.
 
 Required variables:
 
@@ -111,7 +127,7 @@ Required variables:
 - `MONGODB_DB=movie_system`
 - `GATEWAY_BASE_URL=http://localhost:8000/movies`
 
-## Setup
+## 🚀 Setup
 
 1. Install dependencies:
 
@@ -125,7 +141,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8002
 ```
 
-## Swagger Testing
+## 🧪 Swagger Testing
 
 1. Start the Movie Service on port `8002`
 2. Open `http://localhost:8002/docs`
@@ -133,8 +149,8 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8002
 4. Use the returned `id` to test `GET`, `PUT`, and `DELETE`
 5. Open `http://localhost:8000/movies/docs` to test the same service through the API Gateway
 
-## Notes
+## 📝 Notes
 
-- This branch is focused only on the Movie Service backend
+- This branch is focused only on the **Movie Service backend**
 - Frontend and admin-panel code are intentionally excluded from this branch
-- The API Gateway itself is not included here, only the gateway access URL expected for integration
+- The API Gateway itself is not included in this branch, only the integration path expected for access
