@@ -1,0 +1,7 @@
+# user-service/requirements.txt
+fastapi
+uvicorn[standard]
+pydantic[email]
+pymongo
+python-multipart
+httpx
