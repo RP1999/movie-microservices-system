@@ -107,3 +107,16 @@ def clear_history(user_id: str):
         raise HTTPException(status_code=404, detail="No watch history found to delete")
         
     return {"message": f"Successfully deleted {result.deleted_count} watch records"}
+@app.delete("/watch/{user_id}/{movie_id}", tags=["Watch History"])
+def delete_specific_watch(user_id: str, movie_id: str):
+    """
+    Remove a specific movie from a user's watch history.
+    """
+    if watch_collection is None:
+        raise HTTPException(status_code=503, detail="Database connection failed")
+        
+    result = watch_collection.delete_one({"user_id": user_id, "movie_id": movie_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Watch record not found")
+        
+    return {"message": f"Successfully removed movie {movie_id} from user {user_id}'s history"}

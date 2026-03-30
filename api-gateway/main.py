@@ -94,6 +94,11 @@ async def clear_watch_history(user_id: str, request: Request):
     """Delete all watch history for a specific user."""
     return await forward("streaming", f"watch/{user_id}", request)
 
+@app.delete("/streaming/watch/{user_id}/{movie_id}", tags=["Streaming Service"])
+async def delete_specific_watch(user_id: str, movie_id: str, request: Request):
+    """Remove a specific movie from a user's watch history."""
+    return await forward("streaming", f"watch/{user_id}/{movie_id}", request)
+
 
 # ══════════════════════════════════════════════════════════
 # WATCHLIST SERVICE  (Siluni — Port 8004)
