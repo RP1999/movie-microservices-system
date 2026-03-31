@@ -20,8 +20,8 @@ SERVICES = {
     "watchlist": "http://localhost:8004",   # Siluni's part
     "review":    "http://localhost:8005",   # Piyumi's part
     "user":      "http://localhost:8001",   # Lashan's part
-    # "movie":   "http://localhost:8002",   # Shevin's part
-    # "analytics":"http://localhost:8006",  # Dilina's part
+    "movie":     "http://localhost:8002",   # Shevin's part
+    "analytics": "http://localhost:8006",   # Dilina's part
 }
 
 # ─────────────────────────────────────────────
@@ -238,3 +238,68 @@ async def get_admins(request: Request):
 async def assign_role_to_user(user_id: int, request: Request, payload: Any = Body(default=None)):
     """Assign an admin or user role to a specific user. Body: {role}"""
     return await forward("user", f"api/admin/users/{user_id}/role", request)
+
+
+# ══════════════════════════════════════════════════════════
+# MOVIE CATALOG SERVICE (Shevin — Port 8002)
+# ══════════════════════════════════════════════════════════
+
+@app.get("/movies", tags=["Movie Service"])
+async def get_movies(request: Request):
+    """Get all movies with optional filters (search, category, sort)."""
+    return await forward("movie", "api/movies", request)
+
+@app.get("/movies/{movie_id}", tags=["Movie Service"])
+async def get_movie_by_id(movie_id: str, request: Request):
+    """Get detailed information for a single movie."""
+    return await forward("movie", f"api/movies/{movie_id}", request)
+
+@app.post("/movies", tags=["Movie Service"])
+async def add_movie(request: Request):
+    """Add a new movie (supports title, category, and file uploads)."""
+    return await forward("movie", "api/movies", request)
+
+@app.put("/movies/{movie_id}", tags=["Movie Service"])
+async def edit_movie(movie_id: str, request: Request):
+    """Update existing movie details or replace thumbnail/video files."""
+    return await forward("movie", f"api/movies/{movie_id}", request)
+
+@app.delete("/movies/{movie_id}", tags=["Movie Service"])
+async def delete_movie(movie_id: str, request: Request):
+    """Permanently delete a movie and its associated files."""
+    return await forward("movie", f"api/movies/{movie_id}", request)
+
+@app.get("/movies/system/health", tags=["Movie Service"])
+async def movie_health(request: Request):
+    """Check the health and database status of the Movie Service."""
+    return await forward("movie", "health", request)
+
+
+# ══════════════════════════════════════════════════════════
+# ANALYTICS SERVICE (Dilina — Port 8006)
+# ══════════════════════════════════════════════════════════
+
+@app.post("/analytics/movies", tags=["Analytics Service"])
+async def track_watch_event(request: Request, payload: Any = Body(default=None)):
+    """Record a movie watch activity for usage tracking. Body: {movie_id, title, genre, total_watch_time_minutes}"""
+    return await forward("analytics", "analytics/movies", request)
+
+@app.get("/analytics/movies", tags=["Analytics Service"])
+async def get_top_movies(request: Request):
+    """Get the list of most watched movies and general statistics."""
+    return await forward("analytics", "analytics/movies", request)
+
+@app.get("/analytics/dashboard", tags=["Analytics Service"])
+async def get_analytics_dashboard(request: Request):
+    """Get a comprehensive system-wide dashboard report (revenue, genre popularily, user activity)."""
+    return await forward("analytics", "analytics/dashboard", request)
+
+@app.put("/analytics/movies/{id}", tags=["Analytics Service"])
+async def update_analytics_record(id: str, request: Request, payload: Any = Body(default=None)):
+    """Update a specific movie's analytics data."""
+    return await forward("analytics", f"analytics/movies/{id}", request)
+
+@app.delete("/analytics/movies/{id}", tags=["Analytics Service"])
+async def delete_analytics_record(id: str, request: Request):
+    """Delete an invalid or corrupt analytics tracking record."""
+    return await forward("analytics", f"analytics/movies/{id}", request)
