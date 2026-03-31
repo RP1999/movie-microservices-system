@@ -11,8 +11,8 @@ import certifi
 # Load environment variables
 load_dotenv()
 
-# Get MongoDB connection URL from environment
-MONGODB_URL = os.getenv("MONGODB_URL")
+# Get MongoDB connection URL from environment with Atlas fallback
+MONGODB_URL = os.getenv("MONGODB_URL", "mongodb+srv://admin:admin123@cluster0.ncxtapi.mongodb.net/movie_system")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "watchlists")
 
 # Global variables

@@ -17,7 +17,7 @@ app = FastAPI(
 )
 
 # Database Connection
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://admin:admin123@cluster0.ncxtapi.mongodb.net/movie_system")
 try:
     client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
     client.server_info() # Trigger exception if cannot connect to db
